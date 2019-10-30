@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.system.ISysLog">
+	<insert id="addUserLog">
+		insert into USER_LOG (USER_ID, OPER_TIME, OPER_TYPE,OPER_DETAIL)
+			values
+   		(${userId}, now(), ${operType}, '${operDetail}');	
+	</insert>
+	<select id="queryUserLog" resultType="org.landslide.data.system.UserLog">
+select userId, userName, userShowName, operTime, operType, operDetail from(	
+  select userId, userName, userShowName, operTime, operType, operDetail
+  from (select ul.USER_ID        as userId,
+               u.USERNAME        as userName,
+               ui.USER_SHOW_NAME as userShowName,
+               ul.OPER_TIME      as operTime,
+               ul.OPER_TYPE      as operType,
+               ul.OPER_DETAIL    as operDetail
+          from USER_LOG ul
+          left join USER u
+            on ul.USER_ID = u.USER_ID
+          left join USER_INFO ui
+            on ul.USER_ID = ui.USER_ID) tbl
+ where 1 = 1
+   <if test="userId!=null">
+   and userId = ${userId}
+   </if>
+   <if test="soperTime!=null">
+   and operTime &gt;= '${soperTime}'
+   </if>
+   <if test="eoperTime!=null">
+   and operTime &lt;= '${eoperTime}'
+   </if>
+   order by operTime desc
+   ) t
+   <if test="nopaging==null">
+		LIMIT ${rows} OFFSET ${offset}
+   </if> 
+	</select>
+	<select id="queryAllUserLog" resultType="java.lang.Integer">
+		select count(*) as total from( select userId, userName, userShowName, operTime, operType,
+		operDetail from (select ul.USER_ID as userId, u.USERNAME as userName, ui.USER_SHOW_NAME as
+		userShowName, ul.OPER_TIME as operTime, ul.OPER_TYPE as operType, ul.OPER_DETAIL as
+		operDetail from USER_LOG ul left join USER u on ul.USER_ID = u.USER_ID left join USER_INFO
+		ui on ul.USER_ID = ui.USER_ID) tbl where 1 = 1
+		<if test="userId!=null">and userId = ${userId}</if>
+		<if test="soperTime!=null">and operTime &gt;= '${soperTime}'</if>
+		<if test="eoperTime!=null">and operTime &lt;= '${eoperTime}'</if>
+		order by operTime desc ) t
+	</select>
+</mapper>

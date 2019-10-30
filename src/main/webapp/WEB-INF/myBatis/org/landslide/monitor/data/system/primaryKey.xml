@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.system.IPrimaryKeyDao">
+	<select id="getPrimaryKey" resultType="int" parameterType="java.util.HashMap">
+		select PK_ID from UNIQUE_TABLE t where TABLE_NAME='${tablename}' AND PK_NAME = '${pkname}'
+	</select>
+	<update id="updatePrimaryKey">
+	update UNIQUE_TABLE set PK_ID=${newpk} where TABLE_NAME='${tablename}' AND PK_NAME='${pkname}'
+	</update>
+</mapper>

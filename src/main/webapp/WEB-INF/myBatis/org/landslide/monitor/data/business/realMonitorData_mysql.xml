@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.business.IRealMonitorData">
+	<select id="queryRealMonitorData" resultType="org.landslide.data.business.RealMonitorData">
+		select
+			MONITOR_ID as monitorId,
+			DV_SIM_CODE as dvSimCode,
+			CL_CODE as clCode,
+			MD_RECORD_TIME as mdRecordTime,
+			MD_DISPLACE_ALERT as mdDisplaceAlert
+		from R_MONITOR_DATA
+		where DV_SIM_CODE='${dvSimCode}'
+		<if test="startRecordTime!=null and endRecordTime!=null"> 
+		and (MD_RECORD_TIME between '${startRecordTime}' and '${endRecordTime}')
+		</if>
+		<if test="startRecordTime!=null and endRecordTime==null"> 
+		and (MD_RECORD_TIME >= '${startRecordTime}')
+		</if>
+		<if test="clCode!=null">
+		and CL_CODE=${clCode}
+		</if>
+		order by MD_RECORD_TIME
+	</select>
+	<select id="queryRealMonitorDataGrid" resultType="org.landslide.data.business.RealMonitorDataGrid">
+		select t.MONITOR_ID        as monitorId,
+		       t.DV_SIM_CODE       as dvSimCode,
+		       t.CL_CODE           as clCode,
+		       t.MD_RECORD_TIME    as mdRecordTime,
+		       t.MD_DISPLACE_ALERT as mdDisplaceAlert,
+		       b.BH_ID             as bhId,
+		       b.NK_ID             as nkId,
+		       b.BH_NAME           as bhName,
+		       b.DV_CODE           as dvCode,
+		       b.DV_NAME           as dvName,
+		       b.NK_NAME           as nkName,
+		       b.NK_CODE           as nkCode
+		  from R_MONITOR_DATA t
+		  left join (select b.BH_ID,
+                    b.NK_ID,
+                    b.BH_NAME,
+                    b.DV_CODE,
+                    b.DV_NAME,
+                    b.DV_SIM_CODE,
+                    n.NK_NAME,
+                    n.NK_CODE
+               from BOREHOLE b
+               left join M_NETWORK n
+                 on n.NK_ID = b.NK_ID) b
+		    on b.DV_SIM_CODE = t.DV_SIM_CODE
+		where 1=1
+		<if test="startRecordTime!=null and endRecordTime!=null"> 
+		and (t.MD_RECORD_TIME between '${startRecordTime}' and '${endRecordTime}')
+		</if>
+		<if test="startRecordTime!=null and endRecordTime==null"> 
+		and (t.MD_RECORD_TIME >= '${startRecordTime}')
+		</if>
+		<if test="clCode!=null">
+		and t.CL_CODE=${clCode}
+		</if>
+		 order by t.MD_RECORD_TIME, t.CL_CODE, t.DV_SIM_CODE, b.BH_ID, b.NK_ID
+		<if test="rows!=null and offset!=null">
+		 LIMIT ${rows} OFFSET ${offset}
+		</if>	
+	</select>
+	<select id="queryRealMonitorDataGridTotal" resultType="int">
+		select count(*) from (
+		select t.MONITOR_ID        as monitorId,
+		       t.DV_SIM_CODE       as dvSimCode,
+		       t.CL_CODE           as clCode,
+		       t.MD_RECORD_TIME    as mdRecordTime,
+		       t.MD_DISPLACE_ALERT as mdDisplaceAlert,
+		       b.BH_ID             as bhId,
+		       b.NK_ID             as nkId,
+		       b.BH_NAME           as bhName,
+		       b.DV_CODE           as dvCode,
+		       b.DV_NAME           as dvName,
+		       b.NK_NAME           as nkName,
+		       b.NK_CODE           as nkCode
+		  from R_MONITOR_DATA t
+		  left join (select b.BH_ID,
+                    b.NK_ID,
+                    b.BH_NAME,
+                    b.DV_CODE,
+                    b.DV_NAME,
+                    b.DV_SIM_CODE,
+                    n.NK_NAME,
+                    n.NK_CODE
+               from BOREHOLE b
+               left join M_NETWORK n
+                 on n.NK_ID = b.NK_ID) b
+		    on b.DV_SIM_CODE = t.DV_SIM_CODE
+		where 1=1
+		<if test="startRecordTime!=null and endRecordTime!=null"> 
+		and (t.MD_RECORD_TIME between '${startRecordTime}' and '${endRecordTime}')
+		</if>
+		<if test="startRecordTime!=null and endRecordTime==null"> 
+		and (t.MD_RECORD_TIME >= '${startRecordTime}')
+		</if>
+		<if test="clCode!=null">
+		and t.CL_CODE=${clCode}
+		</if>
+		) t	
+	</select>	
+	<insert id="addRealMonitorData">
+		insert into R_MONITOR_DATA (DV_SIM_CODE, CL_CODE,MD_RECORD_TIME,MD_DISPLACE_ALERT)
+			values
+   		('${dvSimCode}', '${clCode}', now(), ${mdDisplaceAlert})
+	</insert>
+</mapper>

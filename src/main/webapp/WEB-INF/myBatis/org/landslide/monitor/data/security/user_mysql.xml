@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.security.IUserDao">
+	<select id="getUserByName" parameterType="String"
+		resultType="org.landslide.data.security.User">
+		select * from (
+		select 
+			u.USER_ID as userId,
+		   	USERNAME as userName,
+       		USER_SHOW_NAME as userShowName,
+		   	PASSWORD as passWord,
+		   	ENABLED as isEnabled,
+		   	ACTNONLOCKED as isActNonLocked,
+       		ACT_EXPIRE_DATE as actExpireDate,
+       		CREDENTIALS_EXPIRE_DATE as credentialsExpireDate,
+       		ui.USER_INFO_ID as userInfoId,
+       		USER_COMPANY as userCompany,
+       		USER_TEL as userTel
+  		from USER u
+  		left join USER_INFO ui
+    		on ui.USER_ID = u.USER_ID)u		 
+		 where userName=#{userName}
+	</select>
+	<select id="queryUser" resultType="org.landslide.data.security.User">
+		<![CDATA[
+		select 
+			*
+		from(select 
+			u.USER_ID as userId,
+		   	USERNAME as userName,
+       		USER_SHOW_NAME as userShowName,
+		   	PASSWORD as passWord,
+		   	ENABLED as isEnabled,
+		   	ACTNONLOCKED as isActNonLocked,
+       		ACT_EXPIRE_DATE as actExpireDate,
+       		CREDENTIALS_EXPIRE_DATE as credentialsExpireDate,
+       		ui.USER_INFO_ID as userInfoId,
+       		USER_COMPANY as userCompany,
+       		USER_TEL as userTel
+  		from USER u
+  		left join USER_INFO ui
+    		on ui.USER_ID = u.USER_ID) t 
+    		]]>
+    		<if test="nopaging==null">
+    		LIMIT #{rows} OFFSET #{offset}
+    		</if>    
+	</select>
+	<select id="queryUserTotal" resultType="int">
+		select count(*) from USER 
+	</select>
+	<insert id="addUser">
+		insert into USER
+		   (USER_ID,USERNAME, PASSWORD, ENABLED,ACTNONLOCKED,ACT_EXPIRE_DATE, CREDENTIALS_EXPIRE_DATE)
+		values
+   			(${userId}, '${userName}', '${passWord}',${isEnabled}, ${isActNonLocked}, #{actExpireDate}, #{credentialsExpireDate});
+	</insert>
+	<insert id="addUserInfo">
+		insert into user_info
+   			(USER_INFO_ID,USER_ID, USER_SHOW_NAME, USER_COMPANY, USER_TEL)
+		values
+   			(${userInfoId}, ${userId}, '${userShowName}', '${userCompany}', '${userTel}');
+	</insert>
+	<update id="updateUser">
+		update USER
+		set  USERNAME='${userName}', PASSWORD='${passWord}', ENABLED=${isEnabled},ACTNONLOCKED=${isActNonLocked},ACT_EXPIRE_DATE=#{actExpireDate}, CREDENTIALS_EXPIRE_DATE=#{credentialsExpireDate}
+		where USER_ID=${userId}
+	</update>
+	<update id="updateUserInfo">
+		update user_info
+		set  USER_ID=${userId}, USER_SHOW_NAME= '${userShowName}', USER_COMPANY='${userCompany}', USER_TEL='${userTel}'
+		where USER_INFO_ID=${userInfoId}
+	</update>
+	<update id="updateUserPassword">
+		update USER
+		set  PASSWORD='${passWord}'
+		where USER_ID=${userId}
+	</update>
+	<delete id="deleteUser">
+		delete from USER where USER_ID=${userId}
+	</delete>
+	<delete id="deleteUserInfo">
+		delete from user_info where USER_ID=${userId}
+	</delete>
+	<delete id="deleteUserRole">
+		delete from USER_ROLE where USER_ID=${userId}
+	</delete>
+	<select id="queryUserRole" resultType="java.lang.Integer">
+		select ROLE_ID from USER_ROLE ur where USER_ID=${userId}
+	</select>
+	<insert id="addUserRole">
+		insert into USER_ROLE (USER_ID, ROLE_ID)
+		values (${userId}, ${roleId});
+	</insert>	
+</mapper>

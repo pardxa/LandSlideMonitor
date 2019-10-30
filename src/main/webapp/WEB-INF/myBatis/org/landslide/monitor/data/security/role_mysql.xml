@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.security.IRoleDao">
+	<select id="getRoleById" parameterType="int" resultType="org.landslide.data.security.Role" >
+		select ROLE_ID as roleId, ROLE_NAME as roleName, ROLE_NOTE as
+		roleNote from ROLE where ROLE_ID=#{roleId}
+	</select>
+	<select id="queryRolesByUserId" parameterType="int" resultType="org.landslide.data.security.Role">
+		select r.ROLE_ID as roleId,r.ROLE_NAME as roleName,r.ROLE_NOTE as roleNote 
+		from ROLE r
+		inner join  USER_ROLE ur			
+			on ur.ROLE_ID=r.ROLE_ID
+		where ur.USER_ID=#{userid}		
+	</select>
+	<select id="queryRole" resultType="org.landslide.data.security.Role">
+		<![CDATA[
+		select r.ROLE_ID as roleId,r.ROLE_NAME as roleName,r.ROLE_NOTE as roleNote 
+		from ROLE r 		
+		]]>	
+		<if test="nopaging==null">
+		LIMIT #{rows} OFFSET #{offset}	
+		</if>
+	</select>
+	<select id="queryRoleTotal" resultType="int">
+	select count(*) from ROLE r
+	</select>
+	<insert id="addRole">
+		insert into ROLE
+		   (ROLE_ID,ROLE_NAME, ROLE_NOTE)
+		values
+   			(${roleId}, '${roleName}', '${roleNote}');
+	</insert>
+	<update id="updateRole">
+		update ROLE
+		set  ROLE_NAME='${roleName}', ROLE_NOTE='${roleNote}'
+		where ROLE_ID=${roleId}
+	</update>
+	<delete id="deleteRole">
+		delete from ROLE where ROLE_ID=${roleId}
+	</delete>
+	<delete id="deleteUserRole">
+		delete from USER_ROLE where ROLE_ID=${roleId}
+	</delete>
+	<delete id="deleteRoleResource">	
+		delete from ROLE_RESOURCE where ROLE_ID=${roleId}
+	</delete>
+	<select id="queryRoleResource"></select>
+	<insert id="addRoleResource"></insert>
+</mapper>

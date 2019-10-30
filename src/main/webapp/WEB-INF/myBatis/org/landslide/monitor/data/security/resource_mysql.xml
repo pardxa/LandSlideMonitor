@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.security.IResourceDao">
+	<select id="queryResource" resultType="org.landslide.data.security.Resource">
+		select  t.ROLE_NAME as roleName, t.RC_URL as resourceUrl from (
+		select rol.ROLE_NAME,rc.RC_URL from ROLE_RESOURCE c left join
+		ROLE rol on c.ROLE_ID=rol.ROLE_ID left join RESOURCE rc on
+		c.RC_ID=rc.RC_ID )  t
+	</select>
+	<select id="queryResources" resultType="org.landslide.data.security.Resource">
+		select 	RC_ID as rcId,
+				RC_NAME as rcName,
+				RC_URL as resourceUrl
+	    from RESOURCE r 
+	    <if test="nopaging==null">
+		LIMIT #{rows} OFFSET #{offset}	
+		</if>
+	</select>
+	<select id="queryResourcesTotal" resultType="int">select count(*) from RESOURCE r</select>
+	<select id="queryRoleResource" resultType='java.lang.Integer'>
+		select RC_ID from ROLE_RESOURCE r where ROLE_ID=${roleId}
+	</select>
+	<insert id="addRoleResource">
+		insert into ROLE_RESOURCE (ROLE_ID, RC_ID)
+		values (${roleId}, ${rcId})
+	</insert>
+	<delete id="deleteRoleResource">
+		delete from ROLE_RESOURCE where ROLE_ID=${roleId}
+	</delete>
+</mapper>

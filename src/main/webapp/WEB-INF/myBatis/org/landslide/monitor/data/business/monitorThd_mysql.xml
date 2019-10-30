@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.business.IMonitorThd">
+	<select id="queryMonitorThd" resultType="org.landslide.data.business.MonitorThd">
+		select THD_ID as thdId, BH_ID as bhId, CL_CODE as clCode, THD as thd from MONITOR_THD t
+		where 1=1
+		<if test="bhId!=0">and BH_ID = ${bhId}</if>
+		order by BH_ID,CL_CODE
+		<if test="rows!=0 and offset!=0">LIMIT ${rows} OFFSET ${offset}</if>
+	</select>
+	<select id="queryMonitorThdTotal" resultType="int">
+		select count(*) from (
+				select THD_ID as thdId, BH_ID as bhId, CL_CODE as clCode, THD as thd from MONITOR_THD t
+				where 1=1
+				<if test="bhId!=0">and BH_ID = ${bhId}</if>
+		) t	
+	</select>
+	<insert id="addMonitorThd">
+	insert into MONITOR_THD (THD_ID, BH_ID, CL_CODE, THD)
+			values
+		(${thdId},${bhId},'${clCode}',${thd})
+	</insert>
+	<update id="updateMonitorThd">
+	update MONITOR_THD 
+	set BH_ID = ${bhId}, BH_ID=${bhId}, CL_CODE='${clCode}', THD=${thd}
+	where THD_ID=${thdId}
+	</update>
+	<delete id="deleteMonitorThd">
+	delete from MONITOR_THD where BH_ID=${bhId}
+	</delete>
+</mapper>

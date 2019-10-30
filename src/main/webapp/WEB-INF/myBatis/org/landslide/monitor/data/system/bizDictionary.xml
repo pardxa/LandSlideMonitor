@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.system.IBizDictionaryDao">
+	<select id="queryBizDictionary" resultType="org.landslide.data.system.BizDictionary">
+		select 
+   			DICT_TYPE_ID as dictTypeId,
+   			DICT_NAME as dictName
+		from BIZ_DIC
+	</select>
+	<select id="queryBizDictionaryItem" resultType="org.landslide.data.system.BizDictionaryItem">
+		select
+   			BIZ_DIC_ITEM_ID as bizDicItemId,
+   			DICT_TYPE_ID as dictTypeId,
+   			DICTCODE as dictCode,
+   			DICTNAME as dictName,
+   			DICTORDER as dictOrder,
+   			BIZ_DIC_ITEM_PID as bizDicItemPid
+		from BIZ_DIC_ITEM where BIZ_DIC_ITEM_PID is null ORDER BY BIZ_DIC_ITEM_ID,DICTORDER
+	</select>
+	<select id="queryBizDictionaryItemTree" resultType="org.landslide.data.system.BizDictionaryItem">
+		select
+   			BIZ_DIC_ITEM_ID as bizDicItemId,
+   			DICT_TYPE_ID as dictTypeId,
+   			DICTCODE as dictCode,
+   			DICTNAME as dictName,
+   			DICTORDER as dictOrder,
+   			BIZ_DIC_ITEM_PID as bizDicItemPid
+		from BIZ_DIC_ITEM where BIZ_DIC_ITEM_PID=${bizDicItemPid} and DICT_TYPE_ID='${dictTypeId}' ORDER BY DICTORDER
+	</select>
+</mapper>

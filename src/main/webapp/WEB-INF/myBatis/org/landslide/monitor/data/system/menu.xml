@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.system.IMenuDao">
+	<select id="queryMenuByUserName" parameterType="java.lang.String"
+		resultType="org.landslide.data.system.Menu"
+	>
+select MENU_ID        as menuId,
+       mu.RC_ID       as rcId,
+       rc.RC_URL      as rcUrl,
+       MENU_NAME      as menuName,
+       MENU_DISP_NAME as menuDispName,
+       MENU_ORDER     as menuOrder,
+       MENU_STATUS    as status,
+       MENU_IS_LEAF   as isLeaf,
+       MENU_PID       as menuPid
+  from MENU mu
+  left join RESOURCE rc
+    on rc.RC_ID = mu.RC_ID
+ where mu.RC_ID in (select rr.RC_ID
+                      from ROLE_RESOURCE rr
+                     inner join (select ur.ROLE_ID, u.USERNAME
+                                  from USER_ROLE ur
+                                 inner join USER u
+                                    on u.USER_ID = ur.USER_ID) ur
+                        on ur.ROLE_ID = rr.ROLE_ID
+                     where ur.USERNAME = #{username})
+	</select>
+	<select id="getMenuById" parameterType="int" resultType="org.landslide.data.system.Menu">
+select MENU_ID        as menuId,
+       mu.RC_ID       as rcId,
+       rc.RC_URL      as rcUrl,
+       MENU_NAME      as menuName,
+       MENU_DISP_NAME as menuDispName,
+       MENU_ORDER     as menuOrder,
+       MENU_STATUS    as status,
+       MENU_IS_LEAF   as isLeaf,
+       MENU_PID       as menuPid
+  from MENU mu
+  left join RESOURCE rc
+    on rc.RC_ID = mu.RC_ID
+ where MENU_ID = #{menuId}
+	</select>
+	<insert id="addMenu">
+	insert into MENU
+   		(MENU_ID,RC_ID,MENU_NAME,MENU_DISP_NAME,MENU_ORDER,MENU_STATUS,MENU_IS_LEAF,MENU_PID)
+	values
+   		(${menuId},${rcId}, '${menuName}', '${menuDispName}', ${menuOrder},${status},${isLeaf},${menuPid});
+	</insert>
+	<update id="updateMenu">
+	update MENU
+	set  RC_ID=${rcId},
+		MENU_NAME= '${menuName}',
+		MENU_DISP_NAME='${menuDispName}',
+		MENU_ORDER=${menuOrder},
+		MENU_STATUS=${status},
+		MENU_IS_LEAF=${isLeaf},
+		MENU_PID=${menuPid}
+	where MENU_ID=${menuId}
+	</update>
+	<delete id="deleteMenu">
+	delete from MENU where MENU_ID=${menuId}
+	</delete>
+</mapper>

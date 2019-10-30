@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.system.ISysConfig">
+	<select id="querySysConfig" resultType="org.landslide.data.system.SysConfig">
+		SELECT
+			SYS_CONFIG_ID as sysConfigId,
+			REFRESH_FREQUENCY as refreshFrequency,
+			REAL_QUERY_START as realQueryStart,
+			BHSITE_PHOTO_H as bhSitePhotoH,
+			BHSITE_PHOTO_W as bhSitePhotoW
+		FROM
+			sys_config
+		where SYS_CONFIG_ID=1
+	</select>
+	<update id="updateSysConfig">
+		update sys_config set 
+			REFRESH_FREQUENCY=${refreshFrequency},
+			REAL_QUERY_START=${realQueryStart},
+			BHSITE_PHOTO_H=${bhSitePhotoH},
+			BHSITE_PHOTO_W=${bhSitePhotoW}
+		where SYS_CONFIG_ID=1			
+	</update>
+	<insert id="addSysConfig">
+		insert into sys_config 
+			(SYS_CONFIG_ID,REFRESH_FREQUENCY,REAL_QUERY_START,BHSITE_PHOTO_H,BHSITE_PHOTO_W)
+		values
+			(1,${refreshFrequency},${realQueryStart},${bhSitePhotoH},${bhSitePhotoW})		
+	</insert>
+</mapper>

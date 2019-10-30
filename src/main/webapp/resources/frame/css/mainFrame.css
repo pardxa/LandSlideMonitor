@@ -1,0 +1,66 @@
+	@charset "utf-8";
+	/* CSS Document */
+	/*reset--重置*/
+	html, body, div, h1, h2, h3, h4, h5, h6, ul, li, ol, dl, dt, dd, p, span, em, b, i, input, select, textarea{margin:0; padding:0;}
+	body{font-size:12px; line-height:180%; font-family:Verdana, Simsun;}
+	ul, li{list-style:none;}
+	em, i{font-style:normal;}
+	img{border:0;}
+	a{text-decoration:none; color:#333;}
+	a:hover{text-decoration:underline; color:#3DA2E1;}
+
+	/*default--默认属性*/
+	.left{text-align:left;}
+	.right{text-align:right;}
+	.center{text-align:center;}
+	.fl{float:left;}
+	.fr{float:right;}
+	.clear{clear:both;}
+	.clearfix:after{display:block; height:0; font-size:0; content:"."; clear:both;}
+	.clearfix{*zoom:1;}
+	.btn{padding:3px 6px;}
+	input.text{width:126px; border:1px solid #a5acb5; height:20px;}
+	.font-1{color:#666;}/*== gray ==*/
+	.font-4{color:#3da2e1;}/*== light blue ==*/
+	.font-5{color:#0064ab; }/*== dark blue ==*/
+
+	/*radius box*/
+	.radius .b1, .radius .b2, .radius .b3, .radius .b4 {display:block; height:1px; line-height:1px; font-size:0; overflow:hidden;}
+	.radius .b1, .radius .b4 {margin:0 2px; background:#002d96;}
+	.radius .b2, .radius .b3, .radius .fmain{border-left:1px solid #002d96; border-right:1px solid #002d96;}
+	.radius .b2, .radius .b3{margin:0 1px;}
+	.radius .fmain{min-height:150px; _height:150px;}
+
+	/*main--总框架*/
+	html, body{height:100%;}
+	#wrapper{position:relative; min-width:100%; min-width:1276px\9; *min-width:1256px; width:10%; height:100%;}
+	#header, #footer{position:absolute; left:0; width:100%;}
+	/* 规定头高度，插入背景图片*/
+	#header{top:0; height:70px; background:url(../images/head-bg.gif) repeat-x;}	
+	.index .wrap{min-height:100%;}
+	/* 头标题部分背景*/
+	.head-in{display:block; width:100%; height:70px; background:url(../images/head.gif) center center no-repeat;}
+	/* logo */
+	.head-in .logo{float:left; margin:35px 20px 0 20px; _margin-left:10px; _margin-right:10px; width:180px; height:25px; background:url(../images/logo.png) no-repeat; _background:url(../images/logo.gif) no-repeat;}
+	/*系统名称字体*/
+	.head-in .name{float:left; margin-top:35px; width:350px; height:45px;COLOR:black;font-weight:100;font-size:30px;font-family:STHupo}
+	.head-in .options{margin:15px 10px 0 0; _margin-right:10px;}
+	.head-in .time span{margin-right:10px;}
+	.head-in .options .version{margin-top:5px;}
+	.head-in .options .version .select-wrap{margin-left:13px; width:119px;}	
+	/*用户信息*/
+	.user{height:60px; border-top:0px solid #bfbfbf; border-bottom:0px solid #bebebe; padding-top:40px;float:right;text-align:right}
+	.user .head{display:block; float:left; margin:8px 10px 0 8px; _margin:4px 10px 0 4px; width:16px; height:16px;align:right}
+	.user .tips{float:left; width:500px; margin-top:7px;}
+	.user .tips span{ margin-bottom:4px;}
+	.user .tips span a{padding-left:20px; margin-right:5px; *padding-top:4px;}
+	.user .tips span a.set{background:url(../images/h-set.gif) left center no-repeat; color:#025087;}
+	.user .tips span a.login-out{background:url(../images/h-loginOut.gif) left center no-repeat; color:#025087;}
+	.user .tips span a.help{background:url(../images/h-help.gif) left center no-repeat; color:#025087;}
+
+
+	#container{position:absolute; top:71px;bottom:0px; left:0; width:100%; height:85%;}
+	#container iframe{width:100%; height:100%; *position:absolute; *top:0; bottom:0; position:static;}
+	/* 规定底高度，插入背景图片*/
+	#footer{bottom:0px; height:30px; border-top:1px solid #b7b7b7; background:url(../images/foot-bg.gif) repeat-x;}
+	#footer p{text-align:center; line-height:33px;}

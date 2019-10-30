@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.business.IBoreholeDao">
+	<select id="queryBorehole" resultType="org.landslide.data.business.Borehole">
+		select BH_ID as bhId, NK_ID as nkId, BH_NAME as bhName, DV_CODE as dvCode, DV_NAME as
+		dvName, DV_SIM_CODE as dvSimCode, BH_INT_COORD_DE as bhIntCoordDe, BH_INT_COORD_DN as
+		bhIntCoordDn, BH_INT_COORD_DU as bhIntCoordDu, BH_CONTACT as bhContact, BH_TEL as bhTel,
+		BH_NOTE as bhNote, BH_LG as bhLg, BH_LT as bhLt, BH_DISPLACE_RANGE as bhDisplaceRange from
+		BOREHOLE t where NK_ID =${nkId} LIMIT #{rows} OFFSET #{offset}
+	</select>
+	<select id="queryBoreholeTotal" resultType="int">
+		select count(*) from BOREHOLE t
+	</select>
+	<select id="queryBoreholes" resultType="org.landslide.data.business.Borehole">
+		select BH_ID as bhId, NK_ID as nkId, BH_NAME as bhName, DV_CODE as dvCode, DV_NAME as
+		dvName, DV_SIM_CODE as dvSimCode, BH_INT_COORD_DE as bhIntCoordDe, BH_INT_COORD_DN as
+		bhIntCoordDn, BH_INT_COORD_DU as bhIntCoordDu, BH_CONTACT as bhContact, BH_TEL as bhTel,
+		BH_NOTE as bhNote, BH_LG as bhLg, BH_LT as bhLt, BH_DISPLACE_RANGE as bhDisplaceRange,
+		BH_PHOTO as bhPhoto,BH_PHOTO_HEIGHT as bhPhotoHeight,BH_PHOTO_WIDTH as bhPhotoWidth from
+		BOREHOLE t where NK_ID =${nkId}
+	</select>
+	<insert id="addBorehole">
+		insert into BOREHOLE (BH_ID,NK_ID,BH_NAME,DV_CODE,DV_NAME,DV_SIM_CODE,
+								BH_INT_COORD_DE,BH_INT_COORD_DN,BH_INT_COORD_DU,
+								BH_CONTACT,BH_TEL,BH_NOTE,BH_LG,BH_LT,BH_DISPLACE_RANGE)
+		values (${bhId},${nkId},'${bhName}','${dvCode}','${dvName}','${dvSimCode}',
+				${bhIntCoordDe},${bhIntCoordDn},${bhIntCoordDu},
+				'${bhContact}','${bhTel}','${bhNote}',${bhLg},${bhLt},${bhDisplaceRange});		
+	</insert>
+	<update id="updateBorehole">
+	update BOREHOLE
+	set BH_NAME='${bhName}',DV_CODE='${dvCode}',DV_NAME='${dvName}',DV_SIM_CODE='${dvSimCode}',
+		BH_INT_COORD_DE=${bhIntCoordDe},BH_INT_COORD_DN=${bhIntCoordDn},BH_INT_COORD_DU=${bhIntCoordDu},
+		BH_CONTACT='${bhContact}',BH_TEL='${bhTel}',BH_NOTE='${bhNote}',BH_LG=${bhLg},BH_LT=${bhLt},BH_DISPLACE_RANGE=${bhDisplaceRange}
+	where BH_ID=${bhId}
+	</update>
+	<delete id="deleteBorehole">
+		delete from BOREHOLE where BH_ID=${bhId}
+	</delete>
+	<select id="getBorehole" resultType="org.landslide.data.business.Borehole">
+		select BH_ID as bhId, NK_ID as nkId, BH_NAME as bhName, DV_CODE as dvCode, DV_NAME as
+		dvName, DV_SIM_CODE as dvSimCode, BH_INT_COORD_DE as bhIntCoordDe, BH_INT_COORD_DN as
+		bhIntCoordDn, BH_INT_COORD_DU as bhIntCoordDu, BH_CONTACT as bhContact, BH_TEL as bhTel,
+		BH_NOTE as bhNote, BH_LG as bhLg, BH_LT as bhLt, BH_DISPLACE_RANGE as bhDisplaceRange from
+		BOREHOLE t where BH_ID =${bhId}
+	</select>
+	<update id="uploadBhPhoto">
+	update BOREHOLE
+	set BH_PHOTO_HEIGHT = ${bhPhotoHeight},BH_PHOTO_WIDTH = ${bhPhotoWidth},BH_PHOTO=#{bhPhoto}
+	where BH_ID=${bhId}
+	</update>
+	<select id="queryBoreholeNetwork" resultType="org.landslide.data.business.BoreholeNetwork">
+		select BH_ID as bhId,t.NK_ID as nkId, BH_NAME as bhName, DV_CODE as dvCode, DV_NAME as
+		dvName, DV_SIM_CODE as dvSimCode, BH_INT_COORD_DE as bhIntCoordDe, BH_INT_COORD_DN as
+		bhIntCoordDn, BH_INT_COORD_DU as bhIntCoordDu, BH_CONTACT as bhContact, BH_TEL as bhTel,
+		BH_NOTE as bhNote, BH_LG as bhLg, BH_LT as bhLt, BH_DISPLACE_RANGE as bhDisplaceRange,
+		n.NK_NAME as nkName from BOREHOLE t left join M_NETWORK n on t.NK_ID=n.NK_ID where 1=1
+		<if test="bhId!=0">and BH_ID = ${bhId}</if>
+		<if test="nkId!=0">and t.NK_ID =${nkId}</if>
+		order by n.NK_NAME,BH_NAME
+		<if test="rows!=null and offset!=null">
+		LIMIT ${rows} OFFSET ${offset}
+		</if>
+	</select>
+</mapper>

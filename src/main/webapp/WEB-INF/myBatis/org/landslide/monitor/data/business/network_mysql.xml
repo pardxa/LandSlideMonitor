@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.landslide.data.business.INetworkDao">
+	<select id="queryNetwork" resultType="org.landslide.data.business.Network">
+		select NK_ID as nkId, NK_NAME as nkName, NK_CODE as nkCode, NK_TYPE as nkType, NK_STATUS as
+		nkStatus, NK_START_DATE as nkStartDate,
+		NK_PRIMARY_IP as nkPrimaryIp,
+   		NK_BACKUP_IP as nkBackupIp,
+   		NK_PORT as nkPort,
+   		NK_BACKUP_PORT as nkBackupPort,
+   		NK_DATA_UPLOAD_INV as nkDataUploadInv,
+   		NK_DATA_ENCRYPTION as nkDataEncryption, 
+		REGION as region, CITY as city, PROVINCE as
+		province, ADDR as addr, NK_CONTACT as nkContact, NK_TEL as nkTel, NK_NOTE as nkNote from
+		M_NETWORK t 
+		<if test="nopaging==null">
+		LIMIT #{rows} OFFSET #{offset}
+		</if>
+	</select>
+	<select id="queryNetworkTotal" resultType="int">
+		select count(*) from M_NETWORK t
+	</select>
+	<insert id="addNetwork">
+	insert into M_NETWORK (NK_ID, NK_NAME, NK_CODE, NK_TYPE, NK_STATUS,NK_START_DATE,
+		NK_PRIMARY_IP,NK_BACKUP_IP,NK_PORT,NK_BACKUP_PORT,NK_DATA_UPLOAD_INV,
+   		NK_DATA_ENCRYPTION, REGION, CITY, PROVINCE, ADDR, NK_CONTACT, NK_TEL, NK_NOTE)
+		values (${nkId},'${nkName}','${nkCode}',${nkType},${nkStatus},#{nkStartDate},
+		'${nkPrimaryIp}','${nkBackupIp}',${nkPort},${nkBackupPort},${nkDataUploadInv},
+		${nkDataEncryption},${region},${city},${province},'${addr}','${nkContact}','${nkTel}','${nkNote}');
+	</insert>
+	<update id="updateNetwork">
+	update M_NETWORK 
+	set NK_NAME='${nkName}',NK_CODE='${nkCode}',NK_TYPE=${nkType},NK_STATUS=${nkStatus},
+		NK_START_DATE=#{nkStartDate},NK_PRIMARY_IP='${nkPrimaryIp}',NK_BACKUP_IP='${nkBackupIp}',
+   		NK_PORT=${nkPort},NK_BACKUP_PORT=${nkBackupPort},NK_DATA_UPLOAD_INV=${nkDataUploadInv},
+   		NK_DATA_ENCRYPTION=${nkDataEncryption},REGION=${region},CITY=${city},PROVINCE=${province},ADDR='${addr}',
+		NK_CONTACT='${nkContact}',NK_TEL='${nkTel}',NK_NOTE='${nkNote}'
+	where  NK_ID=${nkId}
+	</update>
+	<delete id="deleteNetwork">
+		delete from M_NETWORK where NK_ID=${nkId}
+	</delete>
+	<select id="getNetwork" resultType="org.landslide.data.business.Network">
+		select NK_ID as nkId, NK_NAME as nkName, NK_CODE as nkCode, NK_TYPE as nkType, NK_STATUS as
+		nkStatus, NK_START_DATE as nkStartDate,
+		NK_PRIMARY_IP as nkPrimaryIp,
+   		NK_BACKUP_IP as nkBackupIp,
+   		NK_PORT as nkPort,
+   		NK_BACKUP_PORT as nkBackupPort,
+   		NK_DATA_UPLOAD_INV as nkDataUploadInv,
+   		NK_DATA_ENCRYPTION as nkDataEncryption, 
+		REGION as region, CITY as city, PROVINCE as
+		province, ADDR as addr, NK_CONTACT as nkContact, NK_TEL as nkTel, NK_NOTE as nkNote from
+		M_NETWORK t where NK_ID=${nkId}
+	</select>
+	<update id="updateNkStatus">
+		update M_NETWORK set NK_STATUS=${nkStatus} where  NK_ID=${nkId}
+	</update>
+</mapper>
